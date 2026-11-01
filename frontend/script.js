@@ -2,7 +2,7 @@
    Roshtaty â€” frontend logic
    ========================================================================== */
 
-const API_BASE = "https://roshtaty-prescription-reader-backen.vercel.app";
+const API_BASE = "";
 const SAMPLES = ["assets/sample-prescription.png", "assets/sample-prescription-2.png"];
 const HISTORY_KEY = "Roshtaty.history.v1";
 const HISTORY_LIMIT = 6;
