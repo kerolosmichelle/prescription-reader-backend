@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Roshtaty turns a photo of any prescription into a clean, structured list of medicines, doses, frequency and duration."
+    >
+
+    <title>Roshtaty ” Prescription Reader</title>
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Welcome notice (shown before the home page) -->
+    <div class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+        <div class="welcome-card">
+            <span class="brand-mark" aria-hidden="true">Rx</span>
+
+            <h2 id="welcomeTitle">Welcome to Roshtaty!</h2>
+
+            <p>We're currently in the early stages of development.</p>
+
+            <p>
+                Our prescription recognition system is still being improved, and its reading accuracy is
+                currently limited. We're continuously working to make it more accurate, reliable, and useful.
+            </p>
+
+            <p class="welcome-warning">
+                Please keep in mind that results may contain errors and should not be used to make medication
+                or treatment decisions without verification by a qualified pharmacist or healthcare professional.
+            </p>
+
+            <p>Thank you for your patience and for being part of our journey!</p>
+
+            <p class="welcome-sign">The Roshtaty Team</p>
+
+            <button class="button button-primary" id="welcomeContinue" type="button">
+                I understand, continue
+            </button>
+        </div>
+    </div>
+
+
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <div class="shell header-inner">
+
+            <a class="brand" href="/" aria-label="Roshtaty home">
+                <span class="brand-mark" aria-hidden="true">Rx</span>
+                <span class="brand-text">
+                    <strong>Roshtaty</strong>
+                    <span>Prescription reader</span>
+                </span>
+            </a>
+
+            <nav class="header-nav" aria-label="Main">
+                <a href="#how-it-works">How it works</a>
+                <a href="#history">History</a>
+                <button class="button button-ghost button-small" id="headerNewScan" type="button">
+                    New scan
+                </button>
+            </nav>
+
+        </div>
+    </header>
+
+    <main class="shell">
+
+        <section class="hero">
+            <span class="eyebrow">
+                <span class="pulse-dot" aria-hidden="true"></span>
+                AI-assisted prescription reading
+            </span>
+
+            <h1>Turn any prescription<br>into a clear medicine list.</h1>
+
+            <p class="hero-copy">
+                Upload a photo of a handwritten or printed prescription. Roshtaty reads it with
+                OCR and organizes every medicine, dose, frequency and course length ” in seconds.
+            </p>
+
+            <ul class="hero-points">
+                <li>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.7 3 4.6v4.9c0 4.3 2.9 7.3 7 8.8 4.1-1.5 7-4.5 7-8.8V4.6l-7-2.9Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m6.9 10 2.1 2.1 4.2-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Private by design
+                </li>
+                <li>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="2.5" width="14" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 6.5h7M6.5 10h7M6.5 13.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Structured results
+                </li>
+                <li>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 5.8V10l2.8 1.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Ready in seconds
+                </li>
+            </ul>
+        </section>
+
+        <section class="workspace" aria-label="Prescription scanner">
+
+            <!-- Upload -->
+            <div class="panel upload-panel">
+
+                <div class="panel-head">
+                    <div>
+                        <p class="panel-kicker">Step 1</p>
+                        <h2>Upload prescription</h2>
+                    </div>
+                    <span class="format-pill">JPG · PNG · WEBP</span>
+                </div>
+
+                <div
+                    class="dropzone"
+                    id="dropzone"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Choose a prescription image or drop it here"
+                >
+                    <span class="dropzone-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3.5A2.5 2.5 0 0 0 6.5 21h11a2.5 2.5 0 0 0 2.5-2.5V15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </span>
+
+                    <p class="dropzone-title">Drop your prescription here</p>
+                    <p class="dropzone-sub">or <span class="link-look">browse your files</span></p>
+                    <p class="dropzone-hint">Up to 10 MB · Sharp, well-lit photos work best</p>
+
+                    <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp,image/bmp,image/tiff" hidden>
+                </div>
+
+                <div class="preview" id="preview" hidden>
+                    <img id="previewImage" alt="Selected prescription preview">
+                    <div class="preview-meta">
+                        <strong id="fileName">prescription.png</strong>
+                        <span id="fileSize">1.2 MB</span>
+                    </div>
+                    <button class="icon-button" id="removeFile" type="button" title="Remove image" aria-label="Remove image">
+                        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 5.5 9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </button>
+                </div>
+
+                <button class="button button-primary" id="extractButton" type="button" disabled>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Extract prescription
+                </button>
+
+                <div class="upload-divider"><span>or</span></div>
+
+                <button class="button button-secondary" id="sampleButton" type="button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7.5L19 8v12.5H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14.5 3.5V8H19M10 13.5h5M10 16.5h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    Try a sample prescription
+                </button>
+
+                <p class="privacy-note">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="8.5" width="12" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 8.5V6.7a3 3 0 0 1 6 0v1.8" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+                    Images are processed once and deleted immediately. Nothing is stored on the server.
+                </p>
+
+            </div>
+
+            <!-- Results -->
+            <div class="panel results-panel" id="resultsPanel" aria-live="polite">
+
+                <div class="panel-head">
+                    <div>
+                        <p class="panel-kicker">Step 2</p>
+                        <h2>Prescription summary</h2>
+                    </div>
+                    <span class="status-pill" id="statusPill" data-state="idle">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span id="statusText">Waiting for image</span>
+                    </span>
+                </div>
+
+                <!-- Empty state -->
+                <div class="results-empty" id="resultsEmpty">
+                    <div class="empty-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 96 96">
+                            <rect x="20" y="12" width="56" height="72" rx="8" fill="#eef7f5" stroke="#b9dcd6" stroke-width="2"/>
+                            <path d="M32 30h32M32 40h32M32 50h20" stroke="#8dc4bb" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="70" cy="72" r="16" fill="#0d766e"/>
+                            <path d="M63 72h14m-7-7v14" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Nothing scanned yet</h3>
+                    <p>Your medicine list, dosage instructions and the original text will appear here.</p>
+                </div>
+
+                <!-- Loading -->
+                <div class="results-loading" id="resultsLoading" hidden>
+                    <div class="loader" aria-hidden="true"><span></span><span></span><span></span></div>
+                    <h3>Reading your prescription¦</h3>
+                    <p>Preprocessing the image and extracting medicine details.</p>
+                    <div class="skeleton">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div class="results-content" id="resultsContent" hidden>
+                    <div class="result-meta" id="resultMeta"></div>
+
+                    <div class="stat-row" id="statRow"></div>
+
+                    <div class="medicine-list" id="medicineList"></div>
+
+                    <div class="result-actions">
+                        <button class="button button-small button-secondary" id="copyButton" type="button">
+                            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="9.5" height="10.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12.5 4.5v-.3c0-.7-.6-1.2-1.2-1.2H6.2C5.5 3 5 3.5 5 4.2v8.1c0 .7.5 1.2 1.2 1.2h.3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                        <button class="button button-small button-secondary" id="downloadTxt" type="button">
+                            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5M4 15.5v.5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            .txt
+                        </button>
+                        <button class="button button-small button-secondary" id="downloadCsv" type="button">
+                            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5M4 15.5v.5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            .csv
+                        </button>
+                        <button class="button button-small button-primary push-right" id="newScanButton" type="button">
+                            New scan
+                        </button>
+                    </div>
+
+                    <details class="raw-text">
+                        <summary>
+                            <span>View raw OCR text</span>
+                            <span class="raw-meta" id="rawMeta"></span>
+                        </summary>
+                        <pre id="rawText"></pre>
+                    </details>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- History -->
+        <section class="history" id="history" hidden>
+            <div class="section-head">
+                <div>
+                    <p class="section-kicker">On this device</p>
+                    <h2>Recent scans</h2>
+                </div>
+                <button class="button button-ghost button-small" id="clearHistory" type="button">Clear history</button>
+            </div>
+            <div class="history-grid" id="historyGrid"></div>
+        </section>
+
+        <!-- How it works -->
+        <section class="how" id="how-it-works">
+            <div class="section-head">
+                <div>
+                    <p class="section-kicker">How it works</p>
+                    <h2>From photo to medicine list</h2>
+                </div>
+            </div>
+
+            <div class="steps">
+                <article class="step">
+                    <span class="step-number">01</span>
+                    <h3>Upload or drop</h3>
+                    <p>Take a photo with your phone or drag in a scan. JPG, PNG, WEBP, BMP and TIFF are supported.</p>
+                </article>
+                <article class="step">
+                    <span class="step-number">02</span>
+                    <h3>OCR reads the page</h3>
+                    <p>The image is straightened, cleaned and upscaled, then Tesseract extracts every line of text.</p>
+                </article>
+                <article class="step">
+                    <span class="step-number">03</span>
+                    <h3>Details are organized</h3>
+                    <p>Medicine names, strengths, doses, frequency and course length are pulled into a structured summary.</p>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell footer-inner">
+            <div class="brand brand-small">
+                <span class="brand-mark" aria-hidden="true">Rx</span>
+                <span class="brand-text">
+                    <strong>Roshtaty</strong>
+                    <span>Prescription reader</span>
+                </span>
+            </div>
+            <p>Built with Flask, OpenCV and Tesseract OCR. For informational use ” always follow your doctor's advice.</p>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

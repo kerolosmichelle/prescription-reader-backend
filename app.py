@@ -21,7 +21,13 @@ except Exception as e:
     print(f"Medicine matcher not available: {e}")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.normpath(os.path.join(BASE_DIR, "..", "frontend"))
+
+# Look for the frontend inside the backend folder first (used on Render),
+# then fall back to the sibling ../frontend folder (used on your own PC).
+_inside_frontend = os.path.join(BASE_DIR, "frontend")
+_sibling_frontend = os.path.normpath(os.path.join(BASE_DIR, "..", "frontend"))
+FRONTEND_DIR = _inside_frontend if os.path.isdir(_inside_frontend) else _sibling_frontend
+
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "bmp", "tif", "tiff", "webp"}
@@ -166,7 +172,11 @@ def handle_not_found(_error_obj):
     if "." in os.path.basename(request.path):
         return _error("File not found.", 404, "not_found")
 
-    return send_from_directory(FRONTEND_DIR, "index.html")
+    # Only fall back to the SPA page if it actually exists on this server.
+    index = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index):
+        return send_from_directory(FRONTEND_DIR, "index.html")
+    return _error("File not found.", 404, "not_found")
 
 
 if __name__ == "__main__":
@@ -176,4 +186,4 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", "5000")),
         debug=debug,
         use_reloader=debug,
-    )
+    )   
